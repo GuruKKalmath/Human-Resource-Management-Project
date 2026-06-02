@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Department</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        textarea{width:100%;margin:12px 0;padding:11px;border:1px solid #ccc;border-radius:8px;font-family:inherit;line-height:1.5;}
+    </style>
+</head>
+<body>
+
+<h2>Launch a Department Charter</h2>
+
+<div class="container">
+
+    <div th:if="${errorMessage}"
+         style="background:#fdecea;color:#962d22;padding:10px;border-radius:8px;margin-bottom:12px;"
+         th:text="${errorMessage}"></div>
+
+    <form th:object="${department}"
+          th:action="@{/departments/save}"
+          method="post">
+
+        <label for="name">Name</label>
+        <input id="name"
+               required
+               th:field="*{name}">
+        <p th:if="${#fields.hasErrors('name')}"
+           th:errors="*{name}"
+           style="color:red;"></p>
+
+        <label for="description">Strategic Narrative</label>
+        <textarea id="description"
+                  rows="4"
+                  th:field="*{description}"
+                  placeholder="Briefly articulate why this pillar exists"></textarea>
+
+        <label for="location">Primary Operational Site</label>
+        <input id="location"
+               th:field="*{location}"
+               placeholder="e.g., Austin Tech Hub">
+
+        <button type="submit" class="btn btn-secondary" style="margin-top:12px;">
+            Persist department blueprint
+        </button>
+    </form>
+
+    <div style="text-align:center;margin-top:16px;">
+        <a class="btn"
+           href="/departments">
+            Cancel
+        </a>
+        <a class="btn btn-secondary"
+           href="/employees/dashboard">
+            Workforce cockpit
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

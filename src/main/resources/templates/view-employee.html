@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lookup Employee</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h2>Lookup by Employee ID</h2>
+
+<div class="container">
+
+    <div th:if="${errorMessage}"
+         style="background:#fdecea;color:#962d22;padding:10px;border-radius:8px;margin-bottom:14px;"
+         th:text="${errorMessage}">
+    </div>
+
+    <form th:action="@{/employees/view-result}" method="get">
+        <label for="employeeId">Human-readable Employee ID</label>
+        <input id="employeeId"
+               type="text"
+               name="employeeId"
+               placeholder="EMP001"
+               required>
+        <button class="btn btn-secondary"
+                style="margin-top:12px;"
+                type="submit">Open dossier</button>
+    </form>
+
+    <p style="color:#617890;font-size:13px;line-height:1.4;margin-top:12px;">
+        Example search: EMP001 searches across persisted HR codes that were minted centrally.
+    </p>
+
+    <div style="text-align:center;margin-top:18px;">
+        <a class="btn"
+           href="/employees/dashboard">
+            Back to Dashboard
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

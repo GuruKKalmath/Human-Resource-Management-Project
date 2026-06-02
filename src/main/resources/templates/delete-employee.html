@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Employee</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<h2>Offboarding Console</h2>
+
+<div class="container">
+
+    <div th:if="${errorMessage}"
+         style="background:#fdecea;color:#962d22;padding:10px;border-radius:8px;margin-bottom:14px;"
+         th:text="${errorMessage}"></div>
+
+    <form th:action="@{/employees/delete}" method="post">
+        <label for="employeeId">Provide the human-readable Employee ID</label>
+        <input id="employeeId"
+               type="text"
+               name="employeeId"
+               placeholder="EMP001"
+               autocomplete="off"
+               required>
+
+        <p style="color:#607080;font-size:13px;line-height:1.4;margin-top:10px;">
+            This references the EMP### badges displayed across dashboards so records stay deterministic for audits.
+        </p>
+
+        <button class="btn btn-danger btn-sm"
+                style="margin-top:14px;"
+                onclick="return confirm('Remove employee permanently?')"
+                type="submit">
+            Delete Employee
+        </button>
+    </form>
+
+    <div style="text-align:center;margin-top:16px;">
+        <a class="btn" href="/employees/dashboard">
+            Abort &amp; Back
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

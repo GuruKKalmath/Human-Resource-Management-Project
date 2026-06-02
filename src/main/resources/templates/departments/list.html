@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Departments</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .muted {font-size:14px;color:#7f8c8d;text-align:center;margin-bottom:12px;line-height:1.5;}
+        .toolbar{text-align:center;margin:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+        tbody tr:nth-child(even){background:#fafcfe;}
+        .muted-cell{color:#8392a8;font-size:13px;text-align:center;}
+        .pill-code{font-family:monospace;font-weight:600;color:#34495e;}
+        .btn-sm{padding:6px 10px!important;font-size:13px!important;}
+    </style>
+</head>
+<body>
+
+<h2>Corporate Department Registry</h2>
+<p class="muted">Maintain the organizational taxonomy that cascades downstream into segmentation, analytics, and access policies.</p>
+
+<div class="toolbar">
+    <a class="btn btn-secondary" th:href="@{/departments/new}">Add department</a>
+    <a class="btn" th:href="@{/employees/dashboard}">Return to cockpit</a>
+</div>
+
+<div class="muted-cell" style="margin:10px;"
+     th:if="${errorMessage}"
+     th:text="${errorMessage}">
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Purpose Narrative</th>
+        <th>Regional Anchor</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dept : ${departments}">
+        <td><span class="pill-code" th:text="${dept.id}">1</span></td>
+        <td th:text="${dept.name}">Name</td>
+        <td style="max-width:360px;line-height:1.4;color:#566273;"
+            th:text="${dept.description != null ? dept.description : 'No narrative supplied yet'}">
+            -
+        </td>
+        <td th:text="${dept.location != null ? dept.location : '—'}">HQ</td>
+        <td>
+            <a class="btn btn-secondary"
+               style="padding:8px 10px;"
+               th:href="@{/departments/edit/{id}(id=${dept.id})}">Modify</a>
+            <form th:action="@{/departments/delete}"
+                  method="post"
+                  style="display:inline;"
+                  onsubmit="return confirm('Retire department record? Employees must be reassigned first.');">
+                <input type="hidden"
+                       name="id"
+                       th:value="${dept.id}" />
+                <button type="submit"
+                        class="btn btn-danger btn-sm">
+                    Retire
+                </button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${departments == null or departments.isEmpty()}">
+        <td colspan="5" class="muted-cell" style="padding:26px;">
+            No departments seeded yet.&nbsp;<a style="font-weight:600;color:#3498db;" th:href="@{/departments/new}">Start with the first pillar</a>.
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

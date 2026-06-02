@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Employees</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        tbody tr:nth-child(even){background:#fafcfe;}
+        table .btn{padding:8px 10px;font-size:13px;}
+        .muted {font-size:14px;color:#7f8c8d;text-align:center;margin-bottom:14px;}
+    </style>
+</head>
+<body>
+
+<h2 id="employees-title">Corporate Directory Snapshot</h2>
+<p class="muted">Shows every teammate with their departmental alignment and readiness status.</p>
+
+<table aria-labelledby="employees-title">
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Status</th>
+            <th>Adjust</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="emp : ${employees}">
+            <td th:text="${emp.employeeId}">EMP001</td>
+            <td th:text="${emp.name}">Name</td>
+            <td th:text="${emp.email}">mail</td>
+            <td th:text="${emp.department != null ? emp.department.name : '—'}">Dept</td>
+            <td th:text="${emp.salary}">0</td>
+            <td th:text="${emp.status}">ACTIVE</td>
+            <td style="white-space:normal;">
+                <a class="btn btn-sm"
+                   th:href="@{/employees/edit/{id}(id=${emp.id})}">Edit</a>
+            </td>
+        </tr>
+        <tr th:if="${employees == null or employees.isEmpty()}">
+            <td colspan="7" style="padding:26px;color:#7f8c8d;text-align:center;">
+                No hires discovered yet — begin with an employee playbook entry.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="text-align:center;margin:18px;">
+    <a class="btn" href="/employees/dashboard">Dashboard</a>
+    <a class="btn btn-secondary" th:href="@{/employees/new}">Add Employee</a>
+</div>
+
+</body>
+</html>

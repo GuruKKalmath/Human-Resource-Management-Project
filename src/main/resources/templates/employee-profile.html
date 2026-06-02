@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Talent Profile</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .hero {
+            padding: 22px;
+            margin: -15px auto 26px auto;
+            max-width: 640px;
+            border-radius: 16px;
+            background: radial-gradient(circle at top left, #4c6ef5, #22336b);
+            color: white;
+            box-shadow: 0 22px 40px rgba(31,51,117,0.35);
+            text-align: left;
+        }
+        .hero h2 {margin: 0;background:transparent;padding:0;}
+        .code {
+            letter-spacing: 0.12em;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+        .chip {
+            background: rgba(255,255,255,0.12);
+            padding: 10px 12px;
+            border-radius: 10px;
+        }
+        .chip span{display:block;text-transform:uppercase;font-size:11px;color:#cad6ff;margin-bottom:4px;}
+        .panel {
+            max-width: 640px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border:1px solid #e3e9f6;
+        }
+        .muted {font-size:14px;color:#7f8c8d;line-height:1.5;text-align:center;margin-top:22px;}
+
+        .status-pill {
+            display:inline-flex;
+            margin-top:8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing:.04em;
+        }
+        .status-active{background:#eaf8ef;color:#1e884a;border:1px solid #b7dfc6;}
+        .status-inactive{background:#fdecef;color:#a2303a;border:1px solid #f3c8d6;}
+        .status-leave{background:#edf3ff;color:#244c90;border:1px solid #c7dafc;}
+        .actions {margin-top:18px;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+        .divider {height:1px;background:#e5ebf9;margin:16px 0;}
+    </style>
+</head>
+<body>
+
+<h1 style="background:transparent;color:#233142;">Employee Spotlight</h1>
+
+<div style="margin:28px;">
+    <section class="hero">
+        <h2 th:text="${employee.name}">Full Name</h2>
+        <div class="code" th:text="${employee.employeeId}">EMP001</div>
+        <span th:classappend="${employee.status.name() == 'ACTIVE'}
+                ? ' status-pill status-active'
+                : (${employee.status.name() == 'INACTIVE'}
+                ? ' status-pill status-inactive'
+                : ' status-pill status-leave')"
+              style="margin-top:12px;"
+              th:text="${employee.status}">
+        </span>
+
+        <div class="grid">
+            <article class="chip">
+                <span>Email</span>
+                <strong th:text="${employee.email}">someone@corp.com</strong>
+            </article>
+            <article class="chip">
+                <span>Department</span>
+                <strong th:text="${employee.department != null ? employee.department.name : '—'}">HQ</strong>
+            </article>
+            <article class="chip">
+                <span>Compensation Baseline</span>
+                <strong th:text="|${employee.salary}|">0</strong>
+            </article>
+            <article class="chip">
+                <span>Internal DB reference</span>
+                <small style="opacity:.82;">Long key <strong th:text="${employee.id}">1</strong> is never shown to staff.</small>
+            </article>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h3 style="margin-top:4px;color:#233142;text-align:center;">Extended HR Context</h3>
+        <p style="text-align:center;color:#64748d;font-size:14px;margin-bottom:14px;line-height:1.5;">
+            Use this dossier ahead of disciplinary reviews or promotion cycles.&nbsp;<br class="responsive-br">
+            Sensitive attributes stay anchored to the departmental graph for traceability.</p>
+
+        <div class="divider"></div>
+
+        <dl style="columns: 1;display: grid;gap:10px;color:#39465b;">
+            <div>
+                <dt style="font-size:12px;text-transform:uppercase;color:#7c8ea3;">Operational Department</dt>
+                <dd th:text="${employee.department != null ? employee.department.name : 'Unassigned'}">Dept</dd>
+                <small th:if="${employee.department}" th:text="${employee.department.location}"
+                       style="color:#8a99ae;">Regional anchor</small>
+            </div>
+            <div>
+                <dt style="font-size:12px;text-transform:uppercase;color:#7c8ea3;">Business Email Alias</dt>
+                <dd th:text="${employee.email}">mail</dd>
+            </div>
+            <div>
+                <dt style="font-size:12px;text-transform:uppercase;color:#7c8ea3;">Public Employee Code</dt>
+                <dd th:text="${employee.employeeId}">EMP000</dd>
+            </div>
+            <div>
+                <dt style="font-size:12px;text-transform:uppercase;color:#7c8ea3;">Engagement Pulse</dt>
+                <dd th:text="${employee.status.name() == 'ACTIVE' ? 'Actively collaborating' :
+                              (employee.status.name() == 'INACTIVE' ? 'Lifecycle paused — follow People Ops playbook' :
+                              'Temporarily routed through leave workflows')} ">ACTIVE</dd>
+            </div>
+        </dl>
+
+        <div class="actions">
+            <a class="btn" th:href="@{/employees/edit/{id}(id=${employee.id})}">
+                Maintain record
+            </a>
+            <a class="btn btn-secondary"
+               href="/employees/dashboard">
+                Return to cockpit
+            </a>
+            <form th:action="@{/employees/delete}"
+                  method="post"
+                  style="display:inline;"
+                  onsubmit="return confirm('Permanently offboard this profile?');">
+                <input type="hidden"
+                       name="employeeId"
+                       th:value="${employee.employeeId}" />
+                <button class="btn btn-danger btn-sm"
+                        type="submit">Offboard</button>
+            </form>
+        </div>
+    </section>
+
+    <p class="muted">
+        Want to widen the storyline? Pivot back into the segmented dashboard filters and watch cross-department rollups reconcile automatically.
+    </p>
+</div>
+
+</body>
+</html>
