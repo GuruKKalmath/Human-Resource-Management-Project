@@ -34,8 +34,8 @@ This is a Spring Boot backend application designed to manage employee data in an
 
 ### Security (if implemented)
 - Spring Security integration
-- Authentication for protected APIs (if applicable)
-- Role-based access control (if applicable)
+- Authentication for protected APIs 
+
 
 ---
 
