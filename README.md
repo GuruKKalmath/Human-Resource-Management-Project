@@ -116,7 +116,7 @@ mvn spring-boot:run
 ---
 
 ## 👨‍💻 Author
-Your Name
+Gurushiddalingayya K Kalmath
 
 ---
 
